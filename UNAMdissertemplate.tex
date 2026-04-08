@@ -1,0 +1,245 @@
+\documentclass[letterpaper,12pt,oneside]{article}
+
+\usepackage[top=1in, left=1.25in, right=1.25in, bottom=1in]{geometry}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish,es-nodecimaldot,es-tabla]{babel}
+\usepackage{caption, subcaption} %figuras
+\usepackage{graphicx}
+\usepackage{array}
+\usepackage{tikz}
+\usepackage{imakeidx}
+\usepackage{biblatex}
+\usepackage{csquotes}
+\addbibresource{bib/protocolo.bib}
+
+\graphicspath{{./figs/}}
+\usepackage{setspace}
+%\usepackage[round]{natbib}
+
+\begin{document}
+%\frontmatter
+\begin{titlepage}
+		\setlength{\parindent}{0pt} \setlength{\parskip}{0pt}
+	
+		\begin{center}
+			\vfill 
+			
+			\begin{minipage}{\textwidth}
+				
+				\newcolumntype{V}{>{\centering\arraybackslash} m{.17\textwidth} }
+				\newcolumntype{C}{>{\centering\arraybackslash} m{.56\textwidth} }
+				
+				\begin{center}
+					\includegraphics[width=4.5cm]{UNAM_LOGO2.png}	
+				\end{center} 	
+				\begin{center}
+					\Huge\textbf{Universidad Nacional Autónoma de México}
+				\end{center} 
+				
+			\end{minipage}
+				
+			\vfill
+			
+			\begin{minipage}{0.7\textwidth}
+				\begin{center}
+					\large Ingeniería en ...
+				\end{center}
+			\end{minipage}
+			% 
+			\begin{center}
+				%\medskip \rule{.9\textwidth}{2pt}
+				\vfill
+				\large Nombre de Asignatura
+				%{\Large \bfseries  \title   }
+				
+				%\medskip \rule{.9\textwidth}{2pt}
+			\end{center}
+			
+			\begin{center}
+				\vspace*{1cm}
+				{\huge FORMATO DE REPORTE}\\
+				\vspace*{1cm}
+				
+				%PRESENTA:\\ \medskip
+				\begin{center}
+					ALUMNO: \\
+					\large 309075318
+				\end{center}
+				
+				\bigskip
+				
+				Grupo: \\
+				\#\\
+				%Coadvisors
+				Semestre: \\
+                2024-II
+			\end{center}
+			
+			\vfill
+			
+			\begin{center}
+				{México,CDMX. Febrero 2024}\\
+			\end{center}
+			\cleardoublepage
+		\end{center}
+	\end{titlepage}
+ 
+\tableofcontents
+\clearpage
+    
+%\mainmatter
+
+\section{Introducción} %
+
+Este apartado debe abordar los siguientes puntos:
+
+\begin{itemize}
+    \item \textbf{Planteamiento del problema.} Se hace una descripción del problema a resolver.
+    \item \textbf{Motivación.} Se describe porqué es necesario dar solución al problema.
+    \item \textbf{Objetivos.} Lo que se se espera obtener de darle solución al problema.
+\end{itemize}
+
+\section{Marco Teórico}
+
+Son los conceptos aplicados, principalmente los vistos en clase, con los que se va a dar solución al problema, explicados de forma concreta, ya sea con su interpretación personal o bien con referencias bibliográficas sólidas.~\cite{10.5555/576122}
+
+%DESARROLLO
+\section{Desarrollo}
+
+\subsection{Simulación de Reproductor de archivos de audio}
+
+\subsubsection{Algoritmo}
+\begin{enumerate}
+	\item Se muestra un menú de opciones.
+	\item Se registran nuevos usuarios en la estructura correspondiente según su tipo.
+	\item Se atienden los usuarios respetando la prioridad de los VIP sobre los usuarios normales.
+	\item Se muestran el contenido de ambas colas.
+\end{enumerate}
+
+\subsubsection{Descripción de Funciones}
+\begin{itemize}
+	\item Función \textbf{insertarCancion}: La función recibe dos argumentos: el apuntador doble a la lista de canciones y una cadena con el título de la canción. Su funcionamiento se divide en los siguientes pasos:
+		\begin{enumerate}
+			\item Se crea un nuevo nodo, reservando dinámicamente memoria con la función \textbf{malloc}. Si no se pudo asignar memoria, se imprime un mensaje de error y la función termina.
+			\item Se copia la cadena \textbf{titulo} al campo \textbf{nuevo->titulo} con ayuda de la función \textbf{strcpy}.
+			\item Si la lista está vacía, el nuevo nodo se enlaza a sí mismo mediante \textbf{nuevo->siguiente = nueva} y el apuntador \textbf{*lista} se actualiza para apuntar al nuevo nodo.
+			\item Si la lista no está vacía, se utiliza un apuntador auxiliar \textbf{actual} para recorrer la lista hasta encontrar el último nodo, es decir, aquel cuyo campo \textbf{siguiente} apunta nuevamente al inicio de la lista.
+			\item El último nodo encontrado se enlaza con el nuevo nodo mediante \textbf{actual->siguiente = nueva}, y el nuevo nodo se enlaza al inicio de la lista con \textbf{nueva->siguiente = *lista}, manteniendo la estructura circular.
+			\item Finalmente, se imprime un mensaje indicando que la canción fue agregada a la lista.
+		\end{enumerate}
+
+	\item Función \textbf{buscarCancion}: La función recibe dos argumentos: el apuntador al inicio de la lista y una cadena con el título de la canción a buscar. Su funcionamiento se divide en los siguientes pasos:
+		\begin{enumerate}
+			\item Se verifica si la lista está vacía. Si lo está, la función regresa \textbf{NULL}.
+			\item Se utiliza un apuntador auxiliar \textbf{actual} para comenzar el recorrido desde el primer nodo de la lista.
+			\item Se recorre la lista circular con una estructura \textbf{do-while}, comparando en cada nodo el campo \textbf{titulo} con la cadena recibida, utilizando la función \textbf{strcmp}.
+			\item Si se encuentra coincidencia, la función regresa el apuntador al nodo correspondiente.
+			\item Si el recorrido termina y no se encontró la canción, la función regresa \textbf{NULL}.
+		\end{enumerate}
+
+	\item Función \textbf{eliminarCancion}: La función recibe tres argumentos: el apuntador doble a la lista, el apuntador doble a la canción en reproducción y una cadena con el título de la canción a eliminar. La función elimina el nodo correspondiente a la canción indicada. Su funcionamiento se divide en los siguientes pasos:
+		\begin{enumerate}
+			\item Se verifica si la lista está vacía. Si lo está, se imprime un mensaje y la función termina.
+			\item Se utilizan dos apuntadores auxiliares: \textbf{actual}, que comienza en el inicio de la lista, y \textbf{anterior}, que inicialmente apunta a \textbf{NULL}.
+			\item Se recorre la lista circular comparando el título de cada nodo con la cadena recibida, utilizando \textbf{strcmp}.
+			\item Si se encuentra la canción, se distinguen tres casos:
+			\begin{enumerate}
+				\item Si la lista solo tiene un elemento, se libera el nodo y el apuntador \textbf{*lista} se actualiza a \textbf{NULL}. Si esa canción era la que se estaba reproduciendo, también debe actualizarse \textbf{*reproduciendo} a \textbf{NULL}.
+				\item Si el nodo a eliminar es el primero de una lista con más de un elemento, se busca el último nodo para actualizar su enlace hacia el nuevo inicio de la lista. Después se actualiza \textbf{*lista} al siguiente nodo.
+				\item En el caso general, el nodo anterior se enlaza directamente con el siguiente nodo del actual, eliminando así el nodo encontrado de la lista.
+			\end{enumerate}
+			\item Si la canción eliminada era la que se estaba reproduciendo, el apuntador \textbf{*reproduciendo} se actualiza al siguiente nodo.
+			\item Se libera la memoria del nodo eliminado con ayuda de la función \textbf{free()}.
+			\item Si la canción no se encuentra después de recorrer toda la lista, se imprime un mensaje indicando que no está en la lista.
+		\end{enumerate}
+
+	\item Función \textbf{empezarReproduccion}: La función recibe dos argumentos: el apuntador al inicio de la lista y el apuntador doble a la canción en reproducción. Su funcionamiento se divide en los siguientes pasos:
+		\begin{enumerate}
+			\item Se verifica si la lista está vacía. Si lo está, se imprime un mensaje, se asigna \textbf{NULL} a \textbf{*reproduciendo} y la función termina.
+			\item Si la lista contiene canciones, el apuntador \textbf{*reproduciendo} se actualiza para apuntar al primer nodo de la lista.
+			\item Finalmente, se imprime el título de la canción que comienza a reproducirse.
+		\end{enumerate}
+
+	\item Función \textbf{siguienteCancion}: La función recibe como argumento el apuntador doble a la canción en reproducción. Su funcionamiento se divide en los siguientes pasos:
+		\begin{enumerate}
+			\item Se verifica si existe una canción en reproducción. Si \textbf{*reproduciendo == NULL}, se imprime un mensaje y la función termina.
+			\item El apuntador \textbf{*reproduciendo} avanza al siguiente nodo de la lista mediante el campo \textbf{siguiente}.
+			\item Finalmente, se imprime el título de la nueva canción en reproducción.
+		\end{enumerate}
+
+	\item Función \textbf{mostrarLista}: La función recibe como argumento el apuntador al inicio de la lista circular. Su funcionamiento se divide en los siguientes pasos:
+		\begin{enumerate}
+			\item Se verifica si la lista está vacía. Si lo está, se imprime un mensaje y la función termina.
+			\item Se utiliza un apuntador auxiliar \textbf{actual} para recorrer la lista desde el inicio.
+			\item Mediante una estructura \textbf{do-while}, se imprime el título de cada canción y se avanza al siguiente nodo hasta regresar al inicio de la lista.
+		\end{enumerate}
+
+	\item Función \textbf{liberarLista}: La función recibe como argumento el apuntador doble a la lista circular. Su propósito es liberar la memoria dinámica ocupada por todos los nodos de la lista. Su funcionamiento se divide en los siguientes pasos:
+		\begin{enumerate}
+			\item Se verifica si la lista está vacía. Si lo está, la función termina.
+			\item Se utiliza un apuntador auxiliar \textbf{actual} para comenzar el recorrido desde el nodo siguiente al primero.
+			\item Se recorre la lista liberando cada nodo hasta regresar al inicio.
+			\item Finalmente, se libera también el primer nodo y se asigna \textbf{NULL} a \textbf{*lista}.
+		\end{enumerate}
+\end{itemize}
+
+\subsubsection{Pruebas}
+
+\begin{table}[h]	
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Tipo} & \textbf{Turno}  & \textbf{Nombre}\\
+\hline
+ VIP&1&Alan\\
+\hline
+ Normal&1&Juan\\
+\hline
+ Normal&2&Roberto\\
+\hline
+ VIP&2&Raymundo\\
+\hline
+ VIP&3&Diego\\
+\hline
+\end{tabular}
+\caption{Usuarios registrados en las colas}
+\end{table}
+
+\begin{table}[h]	
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Turno} & \textbf{Tipo}  & \textbf{Nombre}\\
+\hline
+ 1&VIP&Alan\\
+\hline
+ 2&VIP&Raymundo\\
+\hline
+ 3&VIP&Diego\\
+\hline
+ 1&Normal&Juan\\
+\hline
+ 2&Normal&Roberto\\
+\hline
+\end{tabular}
+\caption{Orden de atención}
+\end{table}
+
+\section{Resultados}
+
+Mediante capturas de pantalla y una breve descripción seguida de la captura se presentan los resultados finales de su aplicación.
+
+\section{Conclusiones}
+
+Se presenta un análisis de los resultados obtenidos, donde se destaca la importancia de la aplicación de los conceptos teóricos para resolver el problema. Es importante resaltar lo siguiente:
+
+\begin{itemize}
+    \item No es describir si les gustó la actividad o no.
+    \item No es decir que se obtuvo de la práctica.
+    \item No es describir lo que fue difícil.
+\end{itemize}
+
+\printbibliography
+\end{document}
