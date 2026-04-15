@@ -109,76 +109,208 @@ Son los conceptos aplicados, principalmente los vistos en clase, con los que se 
 %DESARROLLO
 \section{Desarrollo}
 
-\subsection{Simulación de Reproductor de archivos de audio}
+\subsection{Algoritmo: Carrucel de anuncios/Publicidad}
+\begin{enumerate}
+    \item Se crea una lista.
+    \item Se insertan varios anuncios con su ID, título y descripción.
+    \item Se muestran los anuncios al usuario en forma de carrusel.
+    \item Se le permite al usuario avanzar o retroceder entre los anuncios.
+    \item Se busca un anuncio por medio de su ID.
+    \item Se muestra un mensaje si el anuncio fue encontrado o no.
+    \item Se intenta eliminar un anuncio con un ID que no existe.
+    \item Se muestra la lista de anuncios actual.
+    \item Se elimina un anuncio con un ID existente.
+    \item Se vuelve a mostrar la lista para comprobar que el anuncio fue eliminado.
+    \item Por último se libera la memoria utilizada por la lista.
+\end{enumerate}
+
 
 \subsubsection{Descripción de Funciones}
 \begin{itemize}
-	\item Función \textbf{insertarCancion}: La función recibe dos argumentos: el apuntador doble a la lista de canciones y una cadena con el título de la canción. Su funcionamiento se divide en los siguientes pasos:
-		\begin{enumerate}
-			\item Se crea un nuevo nodo, reservando dinámicamente memoria con la función \textbf{malloc}. Si no se pudo asignar memoria, se imprime un mensaje de error y la función termina.
-			\item Se copia la cadena \textbf{titulo} al campo \textbf{nuevo->titulo} con ayuda de la función \textbf{strcpy}.
-			\item Si la lista está vacía, el nuevo nodo se enlaza a sí mismo mediante \textbf{nuevo->siguiente = nueva} y el apuntador \textbf{*lista} se actualiza para apuntar al nuevo nodo.
-			\item Si la lista no está vacía, se utiliza un apuntador auxiliar \textbf{actual} para recorrer la lista hasta encontrar el último nodo, es decir, aquel cuyo campo \textbf{siguiente} apunta nuevamente al inicio de la lista.
-			\item El último nodo encontrado se enlaza con el nuevo nodo mediante \textbf{actual->siguiente = nueva}, y el nuevo nodo se enlaza al inicio de la lista con \textbf{nueva->siguiente = *lista}, manteniendo la estructura circular.
-			\item Finalmente, se imprime un mensaje indicando que la canción fue agregada a la lista.
-		\end{enumerate}
+	\item Función \textbf{crearNodo}: La función recibe tres argumentos: un entero \textbf{id}, una cadena \textbf{titulo} y una cadena \textbf{descripcion}. Su funcionamiento se divide en los siguientes pasos:
+	\begin{enumerate}
+		\item Se crea un nuevo nodo reservando memoria dinámicamente con la función \textbf{malloc}.
+		\item Se verifica si la memoria fue asignada correctamente. Si no se pudo asignar, se imprime un mensaje de error y la función regresa \textbf{NULL}.
+		\item Se asigna el valor de \textbf{id} al campo \textbf{nuevo->id}.
+		\item Se copia la cadena \textbf{titulo} al campo \textbf{nuevo->titulo} con ayuda de la función \textbf{strcpy}.
+		\item Se copia la cadena \textbf{descripcion} al campo \textbf{nuevo->descripcion}.
+		\item Se inicializan los apuntadores \textbf{nuevo->anterior} y \textbf{nuevo->siguiente} en \textbf{NULL}.
+		\item Finalmente, la función regresa el apuntador al nodo creado.
+	\end{enumerate}
 
-	\item Función \textbf{buscarCancion}: La función recibe dos argumentos: el apuntador al inicio de la lista y una cadena con el título de la canción a buscar. Su funcionamiento se divide en los siguientes pasos:
-		\begin{enumerate}
-			\item Se verifica si la lista está vacía. Si lo está, la función regresa \textbf{NULL}.
-			\item Se utiliza un apuntador auxiliar \textbf{actual} para comenzar el recorrido desde el primer nodo de la lista.
-			\item Se recorre la lista circular con una estructura \textbf{do-while}, comparando en cada nodo el campo \textbf{titulo} con la cadena recibida, utilizando la función \textbf{strcmp}.
-			\item Si se encuentra coincidencia, la función regresa el apuntador al nodo correspondiente.
-			\item Si el recorrido termina y no se encontró la canción, la función regresa \textbf{NULL}.
-		\end{enumerate}
+	\item Función \textbf{insertarAnuncio}: La función recibe cuatro argumentos: el apuntador doble a la lista, un entero \textbf{id}, una cadena \textbf{titulo} y una cadena \textbf{descripcion}. Su funcionamiento se divide en los siguientes pasos:
+	\begin{enumerate}
+		\item Se crea un nuevo nodo llamando a la función \textbf{crearNodo}.
+		\item Se verifica si el nodo fue creado correctamente. Si el nodo es \textbf{NULL}, la función termina.
+		\item Si la lista está vacía, el nuevo nodo se enlaza a sí mismo, asignando \textbf{nuevo->siguiente = nuevo} y \textbf{nuevo->anterior = nuevo}, y el apuntador \textbf{*cabeza} se actualiza para apuntar al nuevo nodo.
+		\item Si la lista no está vacía, se obtiene el último nodo de la lista mediante \textbf{(*cabeza)->anterior}.
+		\item Se enlaza el nuevo nodo al final de la lista, asignando \textbf{nuevo->siguiente = *cabeza} y \textbf{nuevo->anterior = ultimo}.
+		\item Después, se actualizan los enlaces del último nodo y del primero, asignando \textbf{ultimo->siguiente = nuevo} y \textbf{(*cabeza)->anterior = nuevo}.
+	\end{enumerate}
 
-	\item Función \textbf{eliminarCancion}: La función recibe tres argumentos: el apuntador doble a la lista, el apuntador doble a la canción en reproducción y una cadena con el título de la canción a eliminar. La función elimina el nodo correspondiente a la canción indicada. Su funcionamiento se divide en los siguientes pasos:
-		\begin{enumerate}
-			\item Se verifica si la lista está vacía. Si lo está, se imprime un mensaje y la función termina.
-			\item Se utilizan dos apuntadores auxiliares: \textbf{actual}, que comienza en el inicio de la lista, y \textbf{anterior}, que inicialmente apunta a \textbf{NULL}.
-			\item Se recorre la lista circular comparando el título de cada nodo con la cadena recibida, utilizando \textbf{strcmp}.
-			\item Si se encuentra la canción, se distinguen tres casos:
-			\begin{enumerate}
-				\item Si la lista solo tiene un elemento, se libera el nodo y el apuntador \textbf{*lista} se actualiza a \textbf{NULL}. Si esa canción era la que se estaba reproduciendo, también debe actualizarse \textbf{*reproduciendo} a \textbf{NULL}.
-				\item Si el nodo a eliminar es el primero de una lista con más de un elemento, se busca el último nodo para actualizar su enlace hacia el nuevo inicio de la lista. Después se actualiza \textbf{*lista} al siguiente nodo.
-				\item En el caso general, el nodo anterior se enlaza directamente con el siguiente nodo del actual, eliminando así el nodo encontrado de la lista.
-			\end{enumerate}
-			\item Si la canción eliminada era la que se estaba reproduciendo, el apuntador \textbf{*reproduciendo} se actualiza al siguiente nodo.
-			\item Se libera la memoria del nodo eliminado con ayuda de la función \textbf{free()}.
-			\item Si la canción no se encuentra después de recorrer toda la lista, se imprime un mensaje indicando que no está en la lista.
-		\end{enumerate}
+	\item Función \textbf{buscarAnuncio}: La función recibe dos argumentos: el apuntador al inicio de la lista y un entero \textbf{id}. Su funcionamiento se divide en los siguientes pasos:
+	\begin{enumerate}
+		\item Se verifica si la lista está vacía. Si lo está, la función regresa \textbf{NULL}.
+		\item Se utiliza un apuntador auxiliar \textbf{actual} para comenzar el recorrido desde el primer nodo de la lista.
+		\item Se recorre la lista doble circular con una estructura \textbf{do-while}.
+		\item En cada nodo se compara el valor de \textbf{actual->id} con el \textbf{id} recibido.
+		\item Si se encuentra coincidencia, la función regresa el apuntador al nodo correspondiente.
+		\item Si se completa el recorrido y no se encuentra el anuncio, la función regresa \textbf{NULL}.
+	\end{enumerate}
 
-	\item Función \textbf{empezarReproduccion}: La función recibe dos argumentos: el apuntador al inicio de la lista y el apuntador doble a la canción en reproducción. Su funcionamiento se divide en los siguientes pasos:
-		\begin{enumerate}
-			\item Se verifica si la lista está vacía. Si lo está, se imprime un mensaje, se asigna \textbf{NULL} a \textbf{*reproduciendo} y la función termina.
-			\item Si la lista contiene canciones, el apuntador \textbf{*reproduciendo} se actualiza para apuntar al primer nodo de la lista.
-			\item Finalmente, se imprime el título de la canción que comienza a reproducirse.
-		\end{enumerate}
+	\item Función \textbf{eliminarAnuncio}: La función recibe dos argumentos: el apuntador doble a la lista y un entero \textbf{id}. Su funcionamiento se divide en los siguientes pasos:
+	\begin{enumerate}
+		\item Se verifica si la lista está vacía. Si lo está, se imprime un mensaje y la función termina.
+		\item Se busca el nodo que contiene el \textbf{id} recibido llamando a la función \textbf{buscarAnuncio}.
+		\item Si el nodo no se encuentra, se imprime un mensaje indicando que el id no existe en la lista y la función termina.
+		\item Si la lista tiene un solo nodo, se libera su memoria con \textbf{free}, se actualiza \textbf{*cabeza} a \textbf{NULL} y la función termina.
+		\item Si la lista tiene más de un nodo, se actualizan los enlaces de los nodos vecino, asignando \textbf{eliminarNodo->anterior->siguiente = eliminarNodo->siguiente} y \textbf{eliminarNodo->siguiente->anterior = eliminarNodo->anterior}.
+		\item Si el nodo eliminado corresponde a la cabeza de la lista, el apuntador \textbf{*cabeza} se actualiza al siguiente nodo.
+		\item Se obtiene el último nodo mediante \textbf{(*cabeza)->anterior} y se refuerza la estructura circular, actualizando el enlace entre el último y el primero.
+		\item Finalmente, se libera la memoria del nodo eliminado con \textbf{free()} y se imprime un mensaje de confirmación.
+	\end{enumerate}
 
-	\item Función \textbf{siguienteCancion}: La función recibe como argumento el apuntador doble a la canción en reproducción. Su funcionamiento se divide en los siguientes pasos:
-		\begin{enumerate}
-			\item Se verifica si existe una canción en reproducción. Si \textbf{*reproduciendo == NULL}, se imprime un mensaje y la función termina.
-			\item El apuntador \textbf{*reproduciendo} avanza al siguiente nodo de la lista mediante el campo \textbf{siguiente}.
-			\item Finalmente, se imprime el título de la nueva canción en reproducción.
-		\end{enumerate}
+	\item Función \textbf{mostrarAnuncioActual}: La función recibe como argumento un apuntador al nodo actual. Su funcionamiento se divide en los siguientes pasos:
+	\begin{enumerate}
+		\item Se verifica si el apuntador recibido es \textbf{NULL}. Si lo es, se imprime un mensaje indicando que no hay anuncios y la función termina.
+		\item Si existe un nodo válido, se imprimen en pantalla los datos del anuncio actual: \textbf{id}, \textbf{titulo} y \textbf{descripcion}.
+	\end{enumerate}
 
-	\item Función \textbf{mostrarLista}: La función recibe como argumento el apuntador al inicio de la lista circular. Su funcionamiento se divide en los siguientes pasos:
-		\begin{enumerate}
-			\item Se verifica si la lista está vacía. Si lo está, se imprime un mensaje y la función termina.
-			\item Se utiliza un apuntador auxiliar \textbf{actual} para recorrer la lista desde el inicio.
-			\item Mediante una estructura \textbf{do-while}, se imprime el título de cada canción y se avanza al siguiente nodo hasta regresar al inicio de la lista.
-		\end{enumerate}
+	\item Función \textbf{siguienteAnuncio}: La función recibe como argumento un apuntador al nodo actual. Su funcionamiento se divide en los siguientes pasos:
+	\begin{enumerate}
+		\item Se verifica si el apuntador recibido es diferente de \textbf{NULL}.
+		\item Si existe un nodo válido, el apuntador avanza al siguiente nodo mediante \textbf{actual = actual->siguiente}.
+		\item Después se llama a la función \textbf{mostrarAnuncioActual} para mostrar la información del nuevo anuncio actual.
+		\item Si no hay anuncios, se imprime un mensaje indicando que no hay anuncios que mostrar.
+	\end{enumerate}
 
-	\item Función \textbf{liberarLista}: La función recibe como argumento el apuntador doble a la lista circular. Su propósito es liberar la memoria dinámica ocupada por todos los nodos de la lista. Su funcionamiento se divide en los siguientes pasos:
-		\begin{enumerate}
-			\item Se verifica si la lista está vacía. Si lo está, la función termina.
-			\item Se utiliza un apuntador auxiliar \textbf{actual} para comenzar el recorrido desde el nodo siguiente al primero.
-			\item Se recorre la lista liberando cada nodo hasta regresar al inicio.
-			\item Finalmente, se libera también el primer nodo y se asigna \textbf{NULL} a \textbf{*lista}.
-		\end{enumerate}
+	\item Función \textbf{retrocederAnuncio}: La función recibe como argumento un apuntador al nodo actual. Su funcionamiento se divide en los siguientes pasos:
+	\begin{enumerate}
+		\item Se verifica si el apuntador recibido es diferente de \textbf{NULL}.
+		\item Si existe un nodo válido, el apuntador retrocede al nodo anterior mediante \textbf{actual = actual->anterior}.
+		\item Después se llama a la función \textbf{mostrarAnuncioActual} para mostrar la información del anuncio actual.
+		\item Si no hay anuncios, se imprime un mensaje indicando que no hay anuncios que mostrar.
+	\end{enumerate}
+
+	\item Función \textbf{mostrarAnuncios}: La función recibe como argumento el apuntador al inicio de la lista. Su funcionamiento se divide en los siguientes pasos:
+	\begin{enumerate}
+		\item Se verifica si la lista está vacía. Si lo está, se imprime un mensaje y la función termina.
+		\item Se utiliza un apuntador auxiliar \textbf{actual} para comenzar en el primer nodo de la lista.
+		\item Dentro de un ciclo, se llama a la función \textbf{mostrarAnuncioActual} para mostrar el anuncio actual.
+		\item Se presenta un menú con tres opciones: avanzar al anuncio siguiente, regresar al anuncio anterior o dejar de mostrar anuncios.
+		\item Dependiendo de la opción elegida por el usuario, el apuntador \textbf{actual} se actualiza al nodo siguiente o anterior.
+		\item Si el usuario elige salir, la función termina.
+	\end{enumerate}
+
+	\item Función \textbf{mostrarLista}: La función recibe como argumento el apuntador al inicio de la lista doble circular. Su funcionamiento se divide en los siguientes pasos:
+	\begin{enumerate}
+		\item Se verifica si la lista está vacía. Si lo está, se imprime un mensaje y la función termina.
+		\item Se utiliza un apuntador auxiliar \textbf{actual} para recorrer la lista desde el primer nodo.
+		\item Mediante una estructura \textbf{do-while}, se imprimen los datos de cada anuncio: \textbf{id}, \textbf{titulo} y \textbf{descripcion}.
+		\item El recorrido continúa avanzando con \textbf{actual = actual->siguiente} hasta regresar nuevamente al nodo inicial.
+	\end{enumerate}
+
+	\item Función \textbf{liberarLista}: La función recibe como argumento el apuntador doble a la lista. Su propósito es liberar la memoria dinámica ocupada por todos los nodos. Su funcionamiento se divide en los siguientes pasos:
+	\begin{enumerate}
+		\item Se verifica si la lista está vacía. Si lo está, la función termina.
+		\item Se utiliza un apuntador auxiliar \textbf{actual} para comenzar el recorrido desde el nodo siguiente al primero.
+		\item Mientras no se regrese al nodo inicial, se guarda el siguiente nodo en un apuntador temporal, se libera el nodo actual con \textbf{free()} y se continúa con el siguiente.
+		\item Finalmente, se libera también el primer nodo de la lista.
+		\item El apuntador \textbf{*cabeza} se actualiza a \textbf{NULL}.
+	\end{enumerate}
 \end{itemize}
+%TABLA 1
+\subsubsection{Pruebas}
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{ID} & \textbf{Título} & \textbf{Descripción} \\
+\hline
+1234 & Tacos & Ricos tacos de cabeza \\
+1235 & Tortas & Ricas tortas \\
+1236 & Aguas & Aguas frescas de horchata y jamaica \\
+1237 & Pumagua & Pumagua la bebida oficial de los paristas \\
+1238 & Mcdonals & Me encanta \\
+\hline
+\end{tabular}
+\caption{Inserción de anuncios en la lista doble circular}
+\end{table}
 
+%TABLA 2
+\begin{table}[H]
+\centering
 
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{ID buscado} & \textbf{Resultado esperado} & \textbf{Resultado obtenido} \\
+\hline
+1236 & Nodo encontrado & Se encontró el id 1236 \\
+\hline
+\end{tabular}
+\caption{Prueba de la función buscarAnuncio}
+\end{table}
+
+%TABLA 3
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{ID eliminado} & \textbf{Resultado esperado} & \textbf{Resultado obtenido} \\
+\hline
+1239 & No encontrado & El id 1239 no se encontró \\
+\hline
+\end{tabular}
+\caption{Prueba de eliminación de un ID inexistente}
+\end{table}
+
+%TABLA 4
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{ID} & \textbf{Título} & \textbf{Descripción} \\
+\hline
+1234 & Tacos & Ricos tacos de cabeza \\
+1235 & Tortas & Ricas tortas \\
+1236 & Aguas & Aguas frescas de horchata y jamaica \\
+1237 & Pumagua & Pumagua la bebida oficial de los paristas \\
+1238 & Mcdonals & Me encanta \\
+\hline
+\end{tabular}
+\caption{Lista después de intentar eliminar un ID inexistente}
+\end{table}
+
+%TABLA 5
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{ID eliminado} & \textbf{Resultado esperado} & \textbf{Resultado obtenido} \\
+\hline
+1236 & Nodo eliminado & Se eliminó el id 1236 \\
+\hline
+\end{tabular}
+\caption{Prueba de eliminación de un anuncio existente}
+\end{table}
+
+%TABLA 6
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{ID} & \textbf{Título} & \textbf{Descripción} \\
+\hline
+1234 & Tacos & Ricos tacos de cabeza \\
+1235 & Tortas & Ricas tortas \\
+1237 & Pumagua & Pumagua la bebida oficial de los paristas \\
+1238 & Mcdonals & Me encanta \\
+\hline
+\end{tabular}
+\caption{Lista después de eliminar el anuncio con ID 1236}
+\end{table}
+
+%FIN DEL DESARROLLO
 
 \section{Resultados}
 
