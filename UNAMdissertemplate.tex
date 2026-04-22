@@ -109,207 +109,200 @@ Son los conceptos aplicados, principalmente los vistos en clase, con los que se 
 %DESARROLLO
 \section{Desarrollo}
 
-\subsection{Algoritmo: Carrucel de anuncios/Publicidad}
+\subsection{Algoritmo: Carrito de Compra con Estructura De Datos}
+
 \begin{enumerate}
-    \item Se crea una lista.
-    \item Se insertan varios anuncios con su ID, título y descripción.
-    \item Se muestran los anuncios al usuario en forma de carrusel.
-    \item Se le permite al usuario avanzar o retroceder entre los anuncios.
-    \item Se busca un anuncio por medio de su ID.
-    \item Se muestra un mensaje si el anuncio fue encontrado o no.
-    \item Se intenta eliminar un anuncio con un ID que no existe.
-    \item Se muestra la lista de anuncios actual.
-    \item Se elimina un anuncio con un ID existente.
-    \item Se vuelve a mostrar la lista para comprobar que el anuncio fue eliminado.
-    \item Por último se libera la memoria utilizada por la lista.
+    \item Inicializar la lista de productos vacía.
+    \item Mostrar el menú de opciones al usuario.
+    \item Leer la opción seleccionada.
+    \item Según la opción elegida, realizar una de las siguientes acciones:
+    \begin{enumerate}
+        \item Agregar un nuevo producto a la lista.
+        \item Buscar un producto por su ID.
+        \item Eliminar un producto de la lista.
+        \item Mostrar el producto actual.
+        \item Avanzar al siguiente producto.
+        \item Retroceder al producto anterior.
+        \item Mostrar todos los productos en orden hacia adelante.
+        \item Mostrar todos los productos en orden hacia atrás.
+        \item Salir del programa.
+    \end{enumerate}
+    \item Se libera la memoria utilizada.
+    \item Se finaliza el programa mostrando el ticket final.
 \end{enumerate}
 
-
 \subsubsection{Descripción de Funciones}
+
 \begin{itemize}
-	\item Función \textbf{crearNodo}: La función recibe tres argumentos: un entero \textbf{id}, una cadena \textbf{titulo} y una cadena \textbf{descripcion}. Su funcionamiento se divide en los siguientes pasos:
-	\begin{enumerate}
-		\item Se crea un nuevo nodo reservando memoria dinámicamente con la función \textbf{malloc}.
-		\item Se verifica si la memoria fue asignada correctamente. Si no se pudo asignar, se imprime un mensaje de error y la función regresa \textbf{NULL}.
-		\item Se asigna el valor de \textbf{id} al campo \textbf{nuevo->id}.
-		\item Se copia la cadena \textbf{titulo} al campo \textbf{nuevo->titulo} con ayuda de la función \textbf{strcpy}.
-		\item Se copia la cadena \textbf{descripcion} al campo \textbf{nuevo->descripcion}.
-		\item Se inicializan los apuntadores \textbf{nuevo->anterior} y \textbf{nuevo->siguiente} en \textbf{NULL}.
-		\item Finalmente, la función regresa el apuntador al nodo creado.
-	\end{enumerate}
 
-	\item Función \textbf{insertarAnuncio}: La función recibe cuatro argumentos: el apuntador doble a la lista, un entero \textbf{id}, una cadena \textbf{titulo} y una cadena \textbf{descripcion}. Su funcionamiento se divide en los siguientes pasos:
-	\begin{enumerate}
-		\item Se crea un nuevo nodo llamando a la función \textbf{crearNodo}.
-		\item Se verifica si el nodo fue creado correctamente. Si el nodo es \textbf{NULL}, la función termina.
-		\item Si la lista está vacía, el nuevo nodo se enlaza a sí mismo, asignando \textbf{nuevo->siguiente = nuevo} y \textbf{nuevo->anterior = nuevo}, y el apuntador \textbf{*cabeza} se actualiza para apuntar al nuevo nodo.
-		\item Si la lista no está vacía, se obtiene el último nodo de la lista mediante \textbf{(*cabeza)->anterior}.
-		\item Se enlaza el nuevo nodo al final de la lista, asignando \textbf{nuevo->siguiente = *cabeza} y \textbf{nuevo->anterior = ultimo}.
-		\item Después, se actualizan los enlaces del último nodo y del primero, asignando \textbf{ultimo->siguiente = nuevo} y \textbf{(*cabeza)->anterior = nuevo}.
-	\end{enumerate}
+\item Función \textbf{crearNodo}: La función recibe tres argumentos: un entero \textbf{id}, una cadena \textbf{nombre} y un dato de tipo float \textbf{precio}. Su funcionamiento se divide en los siguientes pasos:
+\begin{enumerate}
+    \item Se reserva memoria dinámicamente para un nuevo nodo.
+    \item Se verifica si la memoria fue asignada correctamente.
+    \item Se asignan los valores de \textbf{id}, \textbf{nombre} y \textbf{precio} al nodo.
+    \item Se inicializan los apuntadores \textbf{anterior} y \textbf{siguiente} en \textbf{NULL}.
+    \item Se regresa el apuntador al nodo creado.
+\end{enumerate}
 
-	\item Función \textbf{buscarAnuncio}: La función recibe dos argumentos: el apuntador al inicio de la lista y un entero \textbf{id}. Su funcionamiento se divide en los siguientes pasos:
-	\begin{enumerate}
-		\item Se verifica si la lista está vacía. Si lo está, la función regresa \textbf{NULL}.
-		\item Se utiliza un apuntador auxiliar \textbf{actual} para comenzar el recorrido desde el primer nodo de la lista.
-		\item Se recorre la lista doble circular con una estructura \textbf{do-while}.
-		\item En cada nodo se compara el valor de \textbf{actual->id} con el \textbf{id} recibido.
-		\item Si se encuentra coincidencia, la función regresa el apuntador al nodo correspondiente.
-		\item Si se completa el recorrido y no se encuentra el anuncio, la función regresa \textbf{NULL}.
-	\end{enumerate}
+\item Función \textbf{agregarProducto}: La función recibe el apuntador a la lista y los datos del producto. Su funcionamiento se divide en los siguientes pasos:
+\begin{enumerate}
+    \item Se crea un nuevo nodo.
+    \item Se verifica si el nodo fue creado correctamente.
+    \item Si la lista está vacía, el nodo se enlaza a sí mismo y se convierte en la cabeza.
+    \item Si la lista no está vacía, se obtiene el último nodo.
+    \item Se enlaza el nuevo nodo al final de la lista.
+    \item Se actualizan los enlaces para mantener la estructura circular.
+\end{enumerate}
 
-	\item Función \textbf{eliminarAnuncio}: La función recibe dos argumentos: el apuntador doble a la lista y un entero \textbf{id}. Su funcionamiento se divide en los siguientes pasos:
-	\begin{enumerate}
-		\item Se verifica si la lista está vacía. Si lo está, se imprime un mensaje y la función termina.
-		\item Se busca el nodo que contiene el \textbf{id} recibido llamando a la función \textbf{buscarAnuncio}.
-		\item Si el nodo no se encuentra, se imprime un mensaje indicando que el id no existe en la lista y la función termina.
-		\item Si la lista tiene un solo nodo, se libera su memoria con \textbf{free}, se actualiza \textbf{*cabeza} a \textbf{NULL} y la función termina.
-		\item Si la lista tiene más de un nodo, se actualizan los enlaces de los nodos vecino, asignando \textbf{eliminarNodo->anterior->siguiente = eliminarNodo->siguiente} y \textbf{eliminarNodo->siguiente->anterior = eliminarNodo->anterior}.
-		\item Si el nodo eliminado corresponde a la cabeza de la lista, el apuntador \textbf{*cabeza} se actualiza al siguiente nodo.
-		\item Se obtiene el último nodo mediante \textbf{(*cabeza)->anterior} y se refuerza la estructura circular, actualizando el enlace entre el último y el primero.
-		\item Finalmente, se libera la memoria del nodo eliminado con \textbf{free()} y se imprime un mensaje de confirmación.
-	\end{enumerate}
+\item Función \textbf{buscarProducto}: La función recibe la lista y un \textbf{id}. Su funcionamiento se divide en los siguientes pasos:
+\begin{enumerate}
+    \item Se verifica si la lista está vacía.
+    \item Se recorre la lista con un apuntador auxiliar.
+    \item Se compara cada \textbf{id} con el valor buscado.
+    \item Si se encuentra coincidencia, se regresa el nodo.
+    \item Si no se encuentra, se regresa \textbf{NULL}.
+\end{enumerate}
 
-	\item Función \textbf{mostrarAnuncioActual}: La función recibe como argumento un apuntador al nodo actual. Su funcionamiento se divide en los siguientes pasos:
-	\begin{enumerate}
-		\item Se verifica si el apuntador recibido es \textbf{NULL}. Si lo es, se imprime un mensaje indicando que no hay anuncios y la función termina.
-		\item Si existe un nodo válido, se imprimen en pantalla los datos del anuncio actual: \textbf{id}, \textbf{titulo} y \textbf{descripcion}.
-	\end{enumerate}
+\item Función \textbf{eliminarProducto}: La función recibe la lista y un \textbf{id}. Su funcionamiento se divide en los siguientes pasos:
+\begin{enumerate}
+    \item Se verifica si la lista está vacía.
+    \item Se busca el nodo a eliminar.
+    \item Si no existe, la función termina.
+    \item Si solo hay un nodo, se elimina y la lista queda vacía.
+    \item Si hay más nodos, se actualizan los enlaces de los nodos vecinos.
+    \item Si el nodo eliminado es la cabeza, se actualiza al siguiente nodo.
+    \item Se libera la memoria del nodo eliminado.
+\end{enumerate}
 
-	\item Función \textbf{siguienteAnuncio}: La función recibe como argumento un apuntador al nodo actual. Su funcionamiento se divide en los siguientes pasos:
-	\begin{enumerate}
-		\item Se verifica si el apuntador recibido es diferente de \textbf{NULL}.
-		\item Si existe un nodo válido, el apuntador avanza al siguiente nodo mediante \textbf{actual = actual->siguiente}.
-		\item Después se llama a la función \textbf{mostrarAnuncioActual} para mostrar la información del nuevo anuncio actual.
-		\item Si no hay anuncios, se imprime un mensaje indicando que no hay anuncios que mostrar.
-	\end{enumerate}
+\item Función \textbf{mostrarProductoActual}: La función recibe un nodo actual. Su funcionamiento se divide en los siguientes pasos:
+\begin{enumerate}
+    \item Se verifica si el nodo es \textbf{NULL}.
+    \item Si no lo es, se muestran los datos del producto.
+\end{enumerate}
 
-	\item Función \textbf{retrocederAnuncio}: La función recibe como argumento un apuntador al nodo actual. Su funcionamiento se divide en los siguientes pasos:
-	\begin{enumerate}
-		\item Se verifica si el apuntador recibido es diferente de \textbf{NULL}.
-		\item Si existe un nodo válido, el apuntador retrocede al nodo anterior mediante \textbf{actual = actual->anterior}.
-		\item Después se llama a la función \textbf{mostrarAnuncioActual} para mostrar la información del anuncio actual.
-		\item Si no hay anuncios, se imprime un mensaje indicando que no hay anuncios que mostrar.
-	\end{enumerate}
+\item Función \textbf{siguienteProducto}: La función recibe un nodo actual. Su funcionamiento se divide en los siguientes pasos:
+\begin{enumerate}
+    \item Se verifica que el nodo no sea \textbf{NULL}.
+    \item Se avanza al siguiente nodo.
+    \item Se muestra el producto actual.
+\end{enumerate}
 
-	\item Función \textbf{mostrarAnuncios}: La función recibe como argumento el apuntador al inicio de la lista. Su funcionamiento se divide en los siguientes pasos:
-	\begin{enumerate}
-		\item Se verifica si la lista está vacía. Si lo está, se imprime un mensaje y la función termina.
-		\item Se utiliza un apuntador auxiliar \textbf{actual} para comenzar en el primer nodo de la lista.
-		\item Dentro de un ciclo, se llama a la función \textbf{mostrarAnuncioActual} para mostrar el anuncio actual.
-		\item Se presenta un menú con tres opciones: avanzar al anuncio siguiente, regresar al anuncio anterior o dejar de mostrar anuncios.
-		\item Dependiendo de la opción elegida por el usuario, el apuntador \textbf{actual} se actualiza al nodo siguiente o anterior.
-		\item Si el usuario elige salir, la función termina.
-	\end{enumerate}
+\item Función \textbf{anteriorProducto}: La función recibe un nodo actual. Su funcionamiento se divide en los siguientes pasos:
+\begin{enumerate}
+    \item Se verifica que el nodo no sea \textbf{NULL}.
+    \item Se retrocede al nodo anterior.
+    \item Se muestra el producto actual.
+\end{enumerate}
 
-	\item Función \textbf{mostrarLista}: La función recibe como argumento el apuntador al inicio de la lista doble circular. Su funcionamiento se divide en los siguientes pasos:
-	\begin{enumerate}
-		\item Se verifica si la lista está vacía. Si lo está, se imprime un mensaje y la función termina.
-		\item Se utiliza un apuntador auxiliar \textbf{actual} para recorrer la lista desde el primer nodo.
-		\item Mediante una estructura \textbf{do-while}, se imprimen los datos de cada anuncio: \textbf{id}, \textbf{titulo} y \textbf{descripcion}.
-		\item El recorrido continúa avanzando con \textbf{actual = actual->siguiente} hasta regresar nuevamente al nodo inicial.
-	\end{enumerate}
+\item Función \textbf{mostrarProductos}: La función recibe la lista. Su funcionamiento se divide en los siguientes pasos:
+\begin{enumerate}
+    \item Se verifica si la lista está vacía.
+    \item Se inicia el recorrido desde el primer nodo.
+    \item Se muestra el producto actual.
+    \item Se presenta un menú de navegación.
+    \item Se avanza o retrocede según la opción elegida.
+    \item Si el usuario decide salir, la función termina.
+\end{enumerate}
 
-	\item Función \textbf{liberarLista}: La función recibe como argumento el apuntador doble a la lista. Su propósito es liberar la memoria dinámica ocupada por todos los nodos. Su funcionamiento se divide en los siguientes pasos:
-	\begin{enumerate}
-		\item Se verifica si la lista está vacía. Si lo está, la función termina.
-		\item Se utiliza un apuntador auxiliar \textbf{actual} para comenzar el recorrido desde el nodo siguiente al primero.
-		\item Mientras no se regrese al nodo inicial, se guarda el siguiente nodo en un apuntador temporal, se libera el nodo actual con \textbf{free()} y se continúa con el siguiente.
-		\item Finalmente, se libera también el primer nodo de la lista.
-		\item El apuntador \textbf{*cabeza} se actualiza a \textbf{NULL}.
-	\end{enumerate}
+\item Función \textbf{mostrarTicket}: La función recibe la lista. Su funcionamiento se divide en los siguientes pasos:
+\begin{enumerate}
+    \item Se verifica si la lista está vacía.
+    \item Se recorre la lista desde el primer nodo.
+    \item Se imprimen los datos de cada producto.
+\end{enumerate}
+
+\item Función \textbf{mostrarTicketAdelante}: La función recibe la lista. Su funcionamiento se divide en los siguientes pasos:
+\begin{enumerate}
+    \item Se verifica si la lista está vacía.
+    \item Se recorre la lista en orden hacia adelante.
+    \item Se imprimen los datos de cada producto.
+\end{enumerate}
+
+\item Función \textbf{mostrarTicketAtras}: La función recibe la lista. Su funcionamiento se divide en los siguientes pasos:
+\begin{enumerate}
+    \item Se verifica si la lista está vacía.
+    \item Se inicia desde el último nodo.
+    \item Se recorre la lista hacia atrás.
+    \item Se imprimen los datos de cada producto.
+\end{enumerate}
+
+\item Función \textbf{liberarLista}: La función recibe la lista. Su funcionamiento se divide en los siguientes pasos:
+\begin{enumerate}
+    \item Se verifica si la lista está vacía.
+    \item Se recorren los nodos liberando la memoria de cada uno.
+    \item Se libera el nodo inicial.
+    \item Se asigna \textbf{NULL} a la lista.
+\end{enumerate}
+
+\item Función \textbf{mostrarMenu}: Le muestra al usuario las opciones del programa.
+
 \end{itemize}
+\subsection{Pruebas}
 %TABLA 1
-\subsubsection{Pruebas}
+\subsubsection{Pruebas de Inserción}
+
 \begin{table}[H]
 \centering
-\begin{tabular}{|c|c|c|}
+\begin{tabular}{|c|c|c|c|}
 \hline
-\textbf{ID} & \textbf{Título} & \textbf{Descripción} \\
+\textbf{Caso} & \textbf{ID} & \textbf{Nombre} & \textbf{Precio} \\
 \hline
-1234 & Tacos & Ricos tacos de cabeza \\
-1235 & Tortas & Ricas tortas \\
-1236 & Aguas & Aguas frescas de horchata y jamaica \\
-1237 & Pumagua & Pumagua la bebida oficial de los paristas \\
-1238 & Mcdonals & Me encanta \\
+1 & 101 & Coca-Cola & 18.50 \\
+2 & 102 & Sabritas & 15.00 \\
+3 & 103 & Galletas & 12.00 \\
+4 & 104 & Agua & 10.00 \\
 \hline
 \end{tabular}
-\caption{Inserción de anuncios en la lista doble circular}
+\caption{Pruebas de inserción en la lista doble circular}
 \end{table}
 
 %TABLA 2
+\subsubsection{Pruebas de Eliminación}
+
 \begin{table}[H]
 \centering
-
 \begin{tabular}{|c|c|c|}
 \hline
-\textbf{ID buscado} & \textbf{Resultado esperado} & \textbf{Resultado obtenido} \\
+\textbf{Caso} & \textbf{ID eliminado} & \textbf{Resultado} \\
 \hline
-1236 & Nodo encontrado & Se encontró el id 1236 \\
+1 & 103 & Eliminado correctamente \\
+2 & 200 & No existe en la lista \\
 \hline
 \end{tabular}
-\caption{Prueba de la función buscarAnuncio}
+\caption{Pruebas de eliminación de productos}
 \end{table}
 
 %TABLA 3
+\subsubsection{Pruebas de Impresión}
+
 \begin{table}[H]
 \centering
 \begin{tabular}{|c|c|c|}
 \hline
-\textbf{ID eliminado} & \textbf{Resultado esperado} & \textbf{Resultado obtenido} \\
+\textbf{Caso} & \textbf{Tipo de impresión} & \textbf{Resultado} \\
 \hline
-1239 & No encontrado & El id 1239 no se encontró \\
+1 & Adelante & Lista en orden de inserción \\
+2 & Atrás & Lista en orden inverso \\
 \hline
 \end{tabular}
-\caption{Prueba de eliminación de un ID inexistente}
+\caption{Pruebas de impresión de productos}
 \end{table}
+
+\subsubsection{Pruebas de Impresión}
 
 %TABLA 4
 \begin{table}[H]
 \centering
 \begin{tabular}{|c|c|c|}
 \hline
-\textbf{ID} & \textbf{Título} & \textbf{Descripción} \\
+\textbf{Caso} & \textbf{Tipo de impresión} & \textbf{Resultado} \\
 \hline
-1234 & Tacos & Ricos tacos de cabeza \\
-1235 & Tortas & Ricas tortas \\
-1236 & Aguas & Aguas frescas de horchata y jamaica \\
-1237 & Pumagua & Pumagua la bebida oficial de los paristas \\
-1238 & Mcdonals & Me encanta \\
+1 & Adelante & Lista en orden de inserción \\
+2 & Atrás & Lista en orden inverso \\
 \hline
 \end{tabular}
-\caption{Lista después de intentar eliminar un ID inexistente}
+\caption{Pruebas de impresión de productos}
 \end{table}
-
-%TABLA 5
-\begin{table}[H]
-\centering
-\begin{tabular}{|c|c|c|}
-\hline
-\textbf{ID eliminado} & \textbf{Resultado esperado} & \textbf{Resultado obtenido} \\
-\hline
-1236 & Nodo eliminado & Se eliminó el id 1236 \\
-\hline
-\end{tabular}
-\caption{Prueba de eliminación de un anuncio existente}
-\end{table}
-
-%TABLA 6
-\begin{table}[H]
-\centering
-\begin{tabular}{|c|c|c|}
-\hline
-\textbf{ID} & \textbf{Título} & \textbf{Descripción} \\
-\hline
-1234 & Tacos & Ricos tacos de cabeza \\
-1235 & Tortas & Ricas tortas \\
-1237 & Pumagua & Pumagua la bebida oficial de los paristas \\
-1238 & Mcdonals & Me encanta \\
-\hline
-\end{tabular}
-\caption{Lista después de eliminar el anuncio con ID 1236}
-\end{table}
-
 %FIN DEL DESARROLLO
 
 \section{Resultados}

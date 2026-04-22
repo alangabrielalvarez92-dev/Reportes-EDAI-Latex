@@ -1,0 +1,14 @@
+[0] Config.pm:307> INFO - This is Biber 2.19
+[0] Config.pm:310> INFO - Logfile is 'UNAMdissertemplate.blg'
+[65] biber:340> INFO - === Tue Apr 21, 2026, 22:44:13
+[79] Biber.pm:419> INFO - Reading 'UNAMdissertemplate.bcf'
+[116] Biber.pm:979> INFO - Found 1 citekeys in bib section 0
+[124] Biber.pm:4419> INFO - Processing section 0
+[131] Biber.pm:4610> INFO - Looking for bibtex file 'bib/protocolo.bib' for section 0
+[133] bibtex.pm:1713> INFO - LaTeX decoding ...
+[154] bibtex.pm:1519> INFO - Found BibTeX data source 'bib/protocolo.bib'
+[187] UCollate.pm:68> INFO - Overriding locale 'es-ES' defaults 'variable = shifted' with 'variable = non-ignorable'
+[187] UCollate.pm:68> INFO - Overriding locale 'es-ES' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[188] Biber.pm:4239> INFO - Sorting list 'nty/global//global/global' of type 'entry' with template 'nty' and locale 'es-ES'
+[189] bbl.pm:660> INFO - Writing 'UNAMdissertemplate.bbl' with encoding 'UTF-8'
+[190] bbl.pm:763> INFO - Output to UNAMdissertemplate.bbl
